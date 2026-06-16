@@ -39,17 +39,34 @@ setup() {
 }
 
 health_checks() {
-  # Do something useful here that verifies the add-on
-
-  # You can check for specific information in headers:
-  # run curl -sfI https://${PROJNAME}.ddev.site
-  # assert_output --partial "HTTP/2 200"
-  # assert_output --partial "test_header"
-
-  # Or check if some command gives expected output:
-  DDEV_DEBUG=true run ddev launch
+  # Start the pi container profile
+  echo "# Starting pi container profile..." >&3
+  run ddev start --profiles=pi
   assert_success
-  assert_output --partial "FULLURL https://${PROJNAME}.ddev.site"
+
+  # Verify the PI_SCRAPLING_VERSION exists in .ddev/.env.pi
+  echo "# Checking if PI_SCRAPLING_VERSION is initialized..." >&3
+  run grep "PI_SCRAPLING_VERSION=" .ddev/.env.pi
+  assert_success
+  assert_output --partial 'PI_SCRAPLING_VERSION="main"'
+
+  # Verify python package scrapling is installed in the pi container
+  echo "# Verifying scrapling python package in container..." >&3
+  run ddev exec -s pi python3 -c "import scrapling; print('Scrapling imported successfully')"
+  assert_success
+  assert_output --partial "Scrapling imported successfully"
+
+  # Verify google-chrome-stable wrapper exists in the pi container
+  echo "# Verifying google-chrome-stable executable in container..." >&3
+  run ddev exec -s pi which google-chrome-stable
+  assert_success
+  assert_output --partial "/usr/bin/google-chrome-stable"
+
+  # Verify scrapling-official skill is registered with pi agent
+  echo "# Verifying scrapling-official skill registered with pi agent..." >&3
+  run ddev exec -s pi npx skills list --agent pi
+  assert_success
+  assert_output --partial "scrapling-official"
 }
 
 teardown() {

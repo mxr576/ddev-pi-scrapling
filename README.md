@@ -7,7 +7,9 @@
 
 ## Overview
 
-This add-on integrates Pi Scrapling into your [DDEV](https://ddev.com/) project.
+This add-on enhances the PI Coding Agent inside the [`ddev-pi`](https://github.com/mxr576/ddev-pi) DDEV addon with support for dynamic web-fetch capabilities.
+
+It provisions the Python `scrapling` package alongside headless Playwright browsers and registers the official Scrapling Skill with the PI coding agent.
 
 ## Installation
 
@@ -20,28 +22,28 @@ After installation, make sure to commit the `.ddev` directory to version control
 
 ## Usage
 
+The Scrapling capabilities are automatically available inside the `pi` container. You can interact with the agent or view registered skills:
+
 | Command | Description |
 | ------- | ----------- |
-| `ddev describe` | View service status and used ports for Pi Scrapling |
-| `ddev logs -s pi-scrapling` | Check Pi Scrapling logs |
+| `ddev exec -s pi pi list` | View registered skills, including `scrapling-official` |
+| `ddev logs -s pi` | Check PI agent logs |
 
-## Advanced Customization
+## Customization
 
-To change the Docker image:
+To customize the version or git ref of the Scrapling Skill:
 
-```bash
-ddev dotenv set .ddev/.env.pi-scrapling --pi-scrapling-docker-image="ddev/ddev-utilities:latest"
-ddev add-on get mxr576/ddev-pi-scrapling
-ddev restart
-```
+1. Update the `PI_SCRAPLING_VERSION` variable in your `.ddev/.env.pi` file (e.g. `PI_SCRAPLING_VERSION="main"`).
+2. Restart the project:
+   ```bash
+   ddev restart
+   ```
 
-Make sure to commit the `.ddev/.env.pi-scrapling` file to version control.
+All customization options:
 
-All customization options (use with caution):
-
-| Variable | Flag | Default |
-| -------- | ---- | ------- |
-| `PI_SCRAPLING_DOCKER_IMAGE` | `--pi-scrapling-docker-image` | `ddev/ddev-utilities:latest` |
+| Variable | Default | Description |
+| -------- | ------- | ----------- |
+| `PI_SCRAPLING_VERSION` | `main` | Version / git ref of the Scrapling Skill to register |
 
 ## Credits
 
