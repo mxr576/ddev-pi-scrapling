@@ -16,6 +16,9 @@ Files under the `pi/` directory are mapped into the `pi` service container using
 
 Strictly adhere to these rules during all development, editing, and testing.
 
+### Addon Dependencies
+- This DDEV addon extends the base `mxr576/ddev-pi` DDEV addon functionality, it **must** explicitly list `mxr576/ddev-pi` under `dependencies` in `install.yaml`.
+
 ### The `.ddev` Directory
 - **Do not modify the `.ddev` directory.** It contains the installed addon used for testing.
 - All work must be on source files **outside** this directory.
