@@ -7,16 +7,4 @@ project_files:
   - docker-compose.pi-scrapling.yaml
   - pi/
 
-ddev_version_constraint: '>= v1.24.10'
-
-post_install_actions:
-  - |
-    #ddev-description:Initialize PI_SCRAPLING_VERSION in .ddev/.env.pi
-    if [ ! -f "${DDEV_APPROOT}/.ddev/.env.pi" ]; then
-      touch "${DDEV_APPROOT}/.ddev/.env.pi"
-    fi
-    if ! grep -q "PI_SCRAPLING_VERSION" "${DDEV_APPROOT}/.ddev/.env.pi"; then
-      echo "" >> "${DDEV_APPROOT}/.ddev/.env.pi"
-      echo "# Version of Scrapling skill/extension to install" >> "${DDEV_APPROOT}/.ddev/.env.pi"
-      echo "PI_SCRAPLING_VERSION=\"main\"" >> "${DDEV_APPROOT}/.ddev/.env.pi"
-    fi
+ddev_version_constraint: '>= v1.25.2'

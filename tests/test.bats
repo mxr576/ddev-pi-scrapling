@@ -44,11 +44,22 @@ health_checks() {
   run ddev start --profiles=pi
   assert_success
 
-  # Verify the PI_SCRAPLING_VERSION exists in .ddev/.env.pi
-  echo "# Checking if PI_SCRAPLING_VERSION is initialized..." >&3
-  run grep "PI_SCRAPLING_VERSION=" .ddev/.env.pi
+  # Verify PI_SCRAPLING_VERSION defaults to "main" inside the pi container
+  echo "# Checking if PI_SCRAPLING_VERSION defaults to main inside the pi container..." >&3
+  run ddev exec -s pi printenv PI_SCRAPLING_VERSION
   assert_success
-  assert_output --partial 'PI_SCRAPLING_VERSION="main"'
+  assert_output "main"
+
+  # Verify we can override PI_SCRAPLING_VERSION via .ddev/.env.pi
+  echo "# Testing override of PI_SCRAPLING_VERSION via .ddev/.env.pi..." >&3
+  echo 'PI_SCRAPLING_VERSION="custom-override"' >> .ddev/.env.pi
+  run ddev restart
+  assert_success
+  run ddev start --profiles=pi
+  assert_success
+  run ddev exec -s pi printenv PI_SCRAPLING_VERSION
+  assert_success
+  assert_output "custom-override"
 
   # Verify python package scrapling is installed in the pi container
   echo "# Verifying scrapling python package in container..." >&3

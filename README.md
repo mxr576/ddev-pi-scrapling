@@ -31,10 +31,15 @@ The Scrapling capabilities are automatically available inside the `pi` container
 
 ## Customization
 
-To customize the version or git ref of the Scrapling Skill:
+The default pinned version of the Scrapling Skill is defined directly in `docker-compose.pi-scrapling.yaml` as the fallback value in the `${PI_SCRAPLING_VERSION:-<version>}` expression.
 
-1. Update the `PI_SCRAPLING_VERSION` variable in your `.ddev/.env.pi` file (e.g. `PI_SCRAPLING_VERSION="main"`).
-2. Restart the project:
+To override this version locally on your machine (without affecting other developers or tracked files):
+
+1. Add the custom version to your `.ddev/.env.pi` file (which is gitignored and safe for local-only settings):
+   ```ini
+   PI_SCRAPLING_VERSION="<version>"
+   ```
+2. Restart the project to apply the change:
    ```bash
    ddev restart
    ```
