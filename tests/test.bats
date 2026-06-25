@@ -73,6 +73,12 @@ health_checks() {
   assert_success
   assert_output --partial "/usr/bin/google-chrome-stable"
 
+  # Verify google-chrome-stable wrapper executes successfully and reports its version
+  echo "# Verifying google-chrome-stable wrapper execution..." >&3
+  run ddev exec -s pi google-chrome-stable --version
+  assert_success
+  assert_output --partial "Google Chrome"
+
   # Verify scrapling-official skill is registered with pi agent
   echo "# Verifying scrapling-official skill registered with pi agent..." >&3
   run ddev exec -s pi npx skills list --agent pi
